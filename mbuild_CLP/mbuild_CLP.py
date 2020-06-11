@@ -45,6 +45,9 @@ class BBP(BB):
         for par in self.particles():
             par.name = '_BBP'
             #print(par.name)
+
+        # Name the entire compound (particle+its ports) to '_bbp'
+        self.name = '_bbp'
         
 class BBO(BB):
     def __init__(self):
@@ -52,22 +55,36 @@ class BBO(BB):
         for par in self.particles():
             par.name = '_BBO'
 
+        # Name the entire compound (particle+its ports) to '_bbo'
+        self.name = '_bbo' 
+
+
 class BBG(BB):
     def __init__(self):
         super(BBG,self).__init__()
         for par in self.particles():
             par.name = '_BBG'
+
+        # Name the entire compound (particle+its ports) to '_bbg'
+        self.name = '_bbg'
+
 class BBK(BB):
     def __init__(self):
         super(BBK,self).__init__()
         for par in self.particles():
             par.name = '_BBK'
 
+        # Name the entire compound (particles+its ports) to '_bbk'
+        self.name = '_bbk'
+
 class BBD(BB):
     def __init__(self):
         super(BBD,self).__init__()
         for par in self.particles():
-            par.name = '_BBD'        
+            par.name = '_BBD'
+
+        # Name the entire compound (particle+its ports) to '_bbd'
+        self.name = '_bbd'        
 
 # Define hydrogen bonding (HB) class        
 class HB(mb.Compound):
@@ -85,12 +102,18 @@ class HBP(HB):
         super(HBP,self).__init__()
         for par in self.particles():
             par.name = '_HBP'
+
+        # Name the entire compound (particle+its ports) to '_hbp'
+        self.name = '_hbp'
         
 class HBG(HB):
     def __init__(self):
         super(HBG,self).__init__()
         for par in self.particles():
             par.name = '_HBG'
+
+        # Name the entire compound (particle+its ports) to '_hbg'
+        self.name = '_hbg'
         
 # Define amino acid (AA) class - combine backbone and hydrogen bonding beads
 class AAP(mb.Compound):
