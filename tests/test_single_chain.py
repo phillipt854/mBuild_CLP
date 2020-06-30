@@ -3,6 +3,7 @@ import numpy as np
 import pytest
 from mbuild_CLP import *
 
+
 def test_sc_sequence():
     chain = CLP('POG')
     name_list = []
@@ -18,11 +19,12 @@ def test_sc_particles():
         for p in aa.children:
             name_list.append(p.name)
     assert name_list == ['_bbp', '_hbp', '_bbo',
-                         '_bbg','_hbg']
+                         '_bbg', '_hbg']
 
 
 def test_HBBB_bond():
-    # Check there is only 1 bond that has the only two particles in the system connected
+    # Check there is only 1 bond that has the only 2 particles in the system 
+    # connected
     chain = CLP('P')
     particle_set = set([p for p in chain.particles()])
     bonds = [b for b in chain.bonds()]
@@ -36,3 +38,4 @@ def test_triplehelix():
     for chain in ds.children:
         chain_list.append(chain)
     assert len(chain_list) == 3
+

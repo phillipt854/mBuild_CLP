@@ -105,7 +105,7 @@ class HBP(HB):
 
         # Name the entire compound (particle+its ports) to '_hbp'
         self.name = '_hbp'
-        
+                      
 class HBG(HB):
     def __init__(self):
         super(HBG,self).__init__()
@@ -130,6 +130,12 @@ class AAO(mb.Compound):
         super(AAO,self).__init__()
         bb = BBO()
         self.add(bb)
+        
+class AAK(mb.Compound):
+    def __init__(self):
+        super(AAK,self).__init__()
+        bb = BBK()
+        self.add(bb)
 
 class AAG(mb.Compound):
     def __init__(self):
@@ -140,13 +146,7 @@ class AAG(mb.Compound):
         #Move
         mb.force_overlap(move_this=hb, from_positions=hb['toBB'],to_positions=bb['toHB'])
         
-class AAK(mb.Compound):
-    def __init__(self):
-        super(AAK,self).__init__()
-        bb = BBK()
-        self.add(bb)
-
-class AAD(mb.Compound):
+class AAD(mb.Compound): 
     def __init__(self):
         super(AAD,self).__init__()
         bb = BBD()
@@ -154,7 +154,7 @@ class AAD(mb.Compound):
         self.add((bb,hb))
         #Move
         mb.force_overlap(move_this=hb, from_positions=hb['toBB'],to_positions=bb['toHB'])
-
+        
 
 def get_AA(type='P'):
     if type == 'P':
@@ -163,17 +163,38 @@ def get_AA(type='P'):
         return AAO()
     if type == 'G':
         return AAG()
-    if type == 'K':
-        return AAK()
     if type == 'D':
-        return AAD
+        return AAD()
+    if type == 'K':
+        return AAK
     return None
 
-    
+# Finally, I also need to add salt ions to maintain charge neutrality
+class IN(mb.Compound):
+    def __init__(self):
+        super(IN, self).__init__(pos=[0,0,0],name = 'bb')#Initizlize an instance of abstract class
+        
+        bead = mb.Particle(pos=[0.0, 0.0, 0.0], name='IN')
+        self.add(bead)
 
+# There are two types of monovalent salt ions in this model, +ve (e.g., Na+) and -ve (e.g, Cl-)
+# First let's define the cations
+class INC(IN):
+    def __init__(self):
+        super(INC,self).__init__()
+        for par in self.particles():
+            par.name = '_INC'
+            #print(par.name)
 
+# And now we can define the anions
+class INA(IN):
+    def __init__(self):
+        super(INA,self).__init__()
+        for par in self.particles():
+            par.name = '_INA'
+            #print(par.name)
 
-
+            
 class CLP(mb.Compound):
     sequence = None
     def __init__(self,seq=None):
@@ -231,7 +252,7 @@ class CLP(mb.Compound):
         view = py3Dmol.view()
         rad = {'_BBP':.5,'_BBK':.5,'_BBG':.5,'_BBO':.5,'_BBD':.5,'_HBP':0.22,'_HBG':0.22}
         col = {'_BBP':'#0000FF','_BBO':'#FF8000','_BBG':'#00FF00','_BBK':'#000000','_BBD':'#FF0000','_HBP':'#FFFF00'
-                 ,'_HBG':'#FFFF00'}
+                 ,'_HBG':'#FFFF00',}
         
         for p in self.particles(include_ports=False):
             view.addSphere({
@@ -302,9 +323,9 @@ class CLP_helix(mb.Compound):
                 particle.name = 'UNK'
                 
         view = py3Dmol.view()
-        rad = {'_BBP':.5,'_BBK':.5,'_BBG':.5,'_BBO':.5,'_BBD':.5,'_HBP':0.22,'_HBG':0.22}
+        rad = {'_BBP':.5,'_BBK':.5,'_BBG':.5,'_BBO':.5,'_BBD':.5,'_HBP':0.22,'_HBG':0.22,'_INC':.5,'_INA':.5}
         col = {'_BBP':'#0000FF','_BBO':'#FF8000','_BBG':'#00FF00','_BBK':'#000000','_BBD':'#FF0000','_HBP':'#FFFF00'
-                 ,'_HBG':'#FFFF00'}
+                 ,'_HBG':'#FFFF00','_INC':'#42C8F5','_INA':'#F5427E'}
         
         for p in self.particles(include_ports=False):
             view.addSphere({
@@ -320,7 +341,7 @@ class CLP_helix(mb.Compound):
          
 
 class CLP_box(mb.Compound):
-    def __init__(self,sequences = [],dim = [0,0,0]):
+    def __init__(self,sequences = [],dim = [0,0,0],salt_ions=[0,0]):
         super(CLP_box,self).__init__()
         if len(sequences) >0 and dim[0]*dim[1]*dim[2] != len(sequences):
             dim = [len(sequences),1,1]
@@ -331,18 +352,25 @@ class CLP_box(mb.Compound):
                     # Create 3 CLP strands
                     new_CLP_helix = CLP_helix(sequences[seq_num])
                     new_CLP_helix.translate_to([i*3.,j*3.,k*3.])
-                    self.add(new_CLP_helix)
-                   
-                        
-             
+                    self.add(new_CLP_helix)          
                     seq_num += 1
+         
+        for l in range(salt_ions[0]):
+            ion = INC()
+            ion.translate_to([l*6.+2.,1.,1.])
+            self.add(ion)
+                             
+        for m in range (salt_ions[1]):
+            ion = INA()
+            ion.translate_to([m*6.+3.5,1.,1.])
+            self.add(ion)      
 
     def visualize(self):
         py3Dmol = import_('py3Dmol')
         view = py3Dmol.view()
-        rad = {'_BBP':.5,'_BBK':.5,'_BBG':.5,'_BBO':.5,'_BBD':.5,'_HBP':0.22,'_HBG':0.22}
+        rad = {'_BBP':.5,'_BBK':.5,'_BBG':.5,'_BBO':.5,'_BBD':.5,'_HBP':0.22,'_HBG':0.22,'_INC':.5,'_INA':.5}
         col = {'_BBP':'#0000FF','_BBO':'#FF8000','_BBG':'#00FF00','_BBK':'#000000','_BBD':'#FF0000','_HBP':'#FFFF00'
-                 ,'_HBG':'#FFFF00'}
+                 ,'_HBG':'#FFFF00','_INC':'#42C8F5','_INA':'#F5427E'}
         
         remove_digits = lambda x: ''.join(i for i in x if not i.isdigit()
                                               or i == '_')
