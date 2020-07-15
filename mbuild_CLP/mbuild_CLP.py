@@ -171,7 +171,7 @@ def get_AA(type='P'):
 # Finally, I also need to add salt ions to maintain charge neutrality
 class IN(mb.Compound):
     def __init__(self):
-        super(IN, self).__init__(pos=[0,0,0],name = 'bb')#Initizlize an instance of abstract class
+        super(IN, self).__init__(pos=[0,0,0],name = 'in')#Initizlize an instance of abstract class
         
         bead = mb.Particle(pos=[0.0, 0.0, 0.0], name='IN')
         self.add(bead)
