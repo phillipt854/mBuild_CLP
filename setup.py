@@ -1,11 +1,11 @@
 from setuptools import setup
 
 setup(
-      name="mbuild_ONA",
+      name="mbuild_CLP",
       install_requires="mbuild",
       entry_points={
-                    "mbuild.plugins":[ "ONA_box = mbuild_ONA.mbuild_ONA:ONA_box"
+                    "mbuild.plugins":[ "CLP = mbuild_CLP.mbuild_CLP:CLP_box"
                         ]
                     },
-                    py_modules=["mbuild_ONA"],
+                    py_modules=["mbuild_CLP"],
                         )
