@@ -19,8 +19,8 @@ from warnings import warn
 ##
 from mbuild.utils.io import run_from_ipython, import_
 
-r0BB = 0.5 # BB-BB bond length of 0.5 sigma for CLP model 
-r0BBHB = 0.37
+r0BB = 0.05 # BB-BB bond length of 0.5 sigma for CLP model 
+r0BBHB = 0.037
 
 
 class BB(mb.Compound):
@@ -271,8 +271,8 @@ class CLP_helix(mb.Compound):
         new_CLP.append(CLP(sequences))
         
         # Create triple helix
-        spacingPos = 1.04/(np.sqrt(3))
-        bBLength = 0.5
+        spacingPos = 1.04/(np.sqrt(3))/10.
+        bBLength = 0.5/10.
         positions = np.array([[0.,0.,0.],[0.,0.,0.],[0.,0.,0.]])
         spin_angle = [-np.pi/6.,-2*np.pi/3.,2.*np.pi/3.]
         for l in range(3):
@@ -281,7 +281,7 @@ class CLP_helix(mb.Compound):
             positions[l] = np.add(positions[l],[-spacingPos,offset,0.])
             positions[l] = np.dot(positions[l],[[np.cos(th),0.,np.sin(th)],[0.,1.0,0.],[-np.sin(th),0.,np.cos(th)]])
             new_CLP[l].translate_to(positions[l])
-            new_CLP[l].spin(spin_angle[l],[0.,1.,0,])
+            new_CLP[l].spin(spin_angle[l],[0.,.1,0,])
             self.add(new_CLP[l])
         
     def visualize(self, show_ports=False):
@@ -338,18 +338,18 @@ class CLP_box(mb.Compound):
                 for k in range(dim[2]): 
                     # Create 3 CLP strands
                     new_CLP_helix = CLP_helix(sequences[seq_num])
-                    new_CLP_helix.translate_to([i*3.,j*3.,k*3.])
+                    new_CLP_helix.translate_to([i*.3,j*.3,k*.3])
                     self.add(new_CLP_helix)          
                     seq_num += 1
          
         for l in range(salt_ions[0]):
             ion = INC()
-            ion.translate_to([l*6.+2.,1.,1.])
+            ion.translate_to([l*.6+.2,.1,.1])
             self.add(ion)
                              
         for m in range (salt_ions[1]):
             ion = INA()
-            ion.translate_to([m*6.+3.5,1.,1.])
+            ion.translate_to([m*.6+.35,.1,.1])
             self.add(ion)      
 
     def visualize(self):
